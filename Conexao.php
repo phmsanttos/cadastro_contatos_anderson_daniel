@@ -1,5 +1,5 @@
 <?php
-
+require_once('config.php');
 class Conexao
 {
     private static $conexao;
@@ -9,11 +9,17 @@ class Conexao
 
     public static function getInstance()
     {
+      try{
         if (is_null(self::$conexao)) {
-            self::$conexao = new \PDO('mysql:host=localhost;port=3306;dbname=crud_contatos', 'root', '');
+            self::$conexao = new \PDO(DSN, USUARIO, SENHA);
             self::$conexao->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             self::$conexao->exec('set names utf8');
         }
         return self::$conexao;
+      }catch(PDOException $e){
+          echo "Houve um problema durante a execução do PDO: ".$e;
+      }catch(Exception $e){
+          echo "Erro genérico de conexão: ".$e;
+      }
     }
 }
