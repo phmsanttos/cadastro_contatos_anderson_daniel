@@ -37,12 +37,14 @@ class ContatosController extends Controller
     public function salvar()
     {
         $contato           = new Contato;
-        $contato->nome     = $this->request->nome;
-        $contato->telefone = $this->request->telefone;
-        $contato->email    = $this->request->email;
+        $contato->nome     = htmlspecialchars($this->request->nome);
+        $contato->telefone =  htmlspecialchars($this->request->telefone);
+        $contato->email    =  htmlspecialchars($this->request->email);
+      if(!empty($contato->nome) && !empty($contato->telefone) && !empty($contato->email)){
         if ($contato->save()) {
             return $this->listar();
         }
+      }else{echo "Todos os campos devem estar devidamente preenchidos";}
     }
 
     /**
@@ -52,9 +54,9 @@ class ContatosController extends Controller
     {
         $id                = (int) $dados['id'];
         $contato           = Contato::find($id);
-        $contato->nome     = $this->request->nome;
-        $contato->telefone = $this->request->telefone;
-        $contato->email    = $this->request->email;
+        $contato->nome     = htmlspecialchars($this->request->nome);
+        $contato->telefone = htmlspecialchars($this->request->telefone);
+        $contato->email    = htmlspecialchars($this->request->email);
         $contato->save();
 
         return $this->listar();
